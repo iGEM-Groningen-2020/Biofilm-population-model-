@@ -1,0 +1,422 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     16249,        414]
+NotebookOptionsPosition[     15635,        396]
+NotebookOutlinePosition[     15977,        411]
+CellTagsIndexPosition[     15934,        408]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Quit", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.8049299940787153`*^9, 3.8049299951149473`*^9}},
+ CellLabel->
+  "In[296]:=",ExpressionUUID->"ecceaec8-d178-47bd-8fe1-1a508820fcfb"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RunBacteria", "[", 
+   RowBox[{"a0_", ",", "b0_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "T", ",", "Aw", ",", "Growth", ",", "tmin", ",", "Growth2", ",", "tmin2",
+       ",", "awmin", ",", "awmin2", ",", "Growth3", ",", "tmin3", ",", 
+      "awmin3", ",", "Growth4", ",", "awmin4", ",", "all", ",", "tmin4", ",", 
+      "Splant", ",", "Ssoil", ",", " ", "init", " ", ",", " ", "GMOplant", 
+      ",", "GMOsoil", ",", "ToPlant", ",", "ToSoil", ",", "WildPlant", ",", 
+      "WildSoil", ",", "ToPlant2", ",", "ToSoil2", ",", "Solution", ",", 
+      "plot1", ",", "plot2"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"GMOplant", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"G", "[", "t", "]"}], ",", "t"}], "]"}], " ", "\[Equal]", 
+       " ", 
+       RowBox[{
+        RowBox[{"Growth", "*", 
+         RowBox[{"G", "[", "t", "]"}], "*", 
+         RowBox[{"(", 
+          FractionBox[
+           RowBox[{"Splant", "-", 
+            RowBox[{"G", "[", "t", "]"}], " ", "-", 
+            RowBox[{"a0", "*", 
+             RowBox[{"B", "[", "t", "]"}], " "}]}], "Splant"], ")"}]}], "+", 
+        "ToPlant", "-", "ToSoil"}]}]}], "    ", ";", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "growth", " ", "equation", " ", "GMO", " ", "near", " ", "plant"}], " ",
+       "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"GMOsoil", "=", " ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"M", "[", "t", "]"}], ",", "t"}], "]"}], " ", "\[Equal]", 
+       " ", 
+       RowBox[{
+        RowBox[{"Growth3", "*", 
+         RowBox[{"M", "[", "t", "]"}], "*", 
+         RowBox[{"(", 
+          FractionBox[
+           RowBox[{"Ssoil", "-", 
+            RowBox[{"M", "[", "t", "]"}], "-", 
+            RowBox[{"a0", "*", 
+             RowBox[{"A", "[", "t", "]"}], " "}]}], "Ssoil"], ")"}]}], "+", 
+        "ToSoil", "-", "ToPlant"}]}]}], "      ", ";", "  ", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "growth", " ", "equation", " ", "GMO", " ", "Away", " ", "from", " ", 
+       "the", " ", "plant"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"ToPlant", ":=", " ", 
+      RowBox[{
+       RowBox[{"M", "[", "t", "]"}], "*", " ", "0.001", "*", 
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"M", "[", "t", "]"}], "+", 
+          RowBox[{"a0", "*", 
+           RowBox[{"A", "[", "t", "]"}], " "}]}], "Ssoil"], ")"}]}]}], "  ", 
+     ";", "  ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Patch", " ", "tranfser", " ", "from", " ", "soil", " ", "to", " ", 
+       "plant", " ", 
+       RowBox[{"(", "GMO", ")"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"ToSoil", " ", ":=", " ", 
+      RowBox[{
+       RowBox[{"G", "[", "t", "]"}], "*", "0.01", "*", 
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"G", "[", "t", "]"}], " ", "+", 
+          RowBox[{"a0", "*", 
+           RowBox[{"B", "[", "t", "]"}]}]}], "Splant"], ")"}]}]}], "     ", 
+     ";", "   ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "patch", " ", "transfer", " ", "from", " ", "plant", " ", "to", " ", 
+       "soil", " ", 
+       RowBox[{"(", "GMO", ")"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "ODE", " ", "equation", " ", "for", " ", "the", " ", "wildtype", " ", 
+       "baccilus"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"WildPlant", "=", " ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"B", "[", "t", "]"}], ",", "t"}], "]"}], "\[Equal]", 
+       RowBox[{
+        RowBox[{"Growth2", "*", 
+         RowBox[{"B", "[", "t", "]"}], "*", 
+         RowBox[{"(", 
+          FractionBox[
+           RowBox[{"Splant", "-", 
+            RowBox[{"B", "[", "t", "]"}], "-", 
+            RowBox[{"b0", "*", 
+             RowBox[{"G", "[", "t", "]"}], " "}]}], "Splant"], ")"}]}], " ", 
+        "+", "ToPlant2", "-", "ToSoil2"}]}]}], ";", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "growth", " ", "equation", " ", "Wildtype", " ", "near", " ", "plant"}],
+       " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"WildSoil", "=", " ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"A", "[", "t", "]"}], ",", "t"}], "]"}], "\[Equal]", 
+       RowBox[{
+        RowBox[{"Growth4", "*", " ", 
+         RowBox[{"A", "[", "t", "]"}], "*", 
+         RowBox[{"(", 
+          FractionBox[
+           RowBox[{"Ssoil", "-", " ", 
+            RowBox[{"A", "[", "t", "]"}], "-", 
+            RowBox[{"b0", "*", 
+             RowBox[{"M", "[", "t", "]"}], " "}]}], "Ssoil"], ")"}]}], "+", 
+        "ToSoil2", "-", "ToPlant2"}]}]}], ";", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "growth", " ", "equation", " ", "Wildtype", " ", "Away", " ", "from", 
+       " ", "the", " ", "plant"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"ToPlant2", " ", ":=", " ", 
+      RowBox[{
+       RowBox[{"A", "[", "t", "]"}], "*", " ", "0.01", "*", 
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"A", "[", "t", "]"}], "+", 
+          RowBox[{"b0", "*", 
+           RowBox[{"M", "[", "t", "]"}], " "}]}], "Ssoil"], ")"}]}]}], ";", 
+     "       ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Patch", " ", "tranfser", " ", "from", " ", "soil", " ", "to", " ", 
+       "plant"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"ToSoil2", ":=", " ", 
+      RowBox[{
+       RowBox[{"B", "[", "t", "]"}], "*", "0.01", "*", 
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"B", "[", "t", "]"}], "+", 
+          RowBox[{"b0", "*", 
+           RowBox[{"G", "[", "t", "]"}], " "}]}], "Splant"], ")"}]}]}], " ", 
+     ";", "    ", "\[IndentingNewLine]", 
+     RowBox[{"T", ":=", " ", 
+      RowBox[{"4", "+", 
+       RowBox[{"18.09", "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{
+          RowBox[{"0.01016", "*", "t"}], "+", "0.3418"}], "]"}]}]}]}], " ", 
+     ";", 
+     RowBox[{"(*", " ", 
+      RowBox[{"equation", " ", "for", " ", "temperature", " ", 
+       RowBox[{"(", "T", ")"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"Aw", " ", ":=", " ", 
+      RowBox[{"0.97", "+", 
+       RowBox[{"0.0001", "*", "t"}]}]}], "   ", ";", "\[IndentingNewLine]", 
+     RowBox[{"Growth", " ", "=", " ", 
+      RowBox[{"2", "*", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"T", "-", "tmin"}], ")"}], "*", 
+          RowBox[{"(", 
+           RowBox[{"Aw", "-", "awmin"}], ")"}]}], ")"}], "^", "2"}]}]}], "  ",
+      ";", "  ", 
+     RowBox[{"(*", 
+      RowBox[{"Growth", " ", "for", " ", "GMO", " ", "near", " ", "root"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"tmin", "=", "9"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"awmin", "=", "0.95"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Growth2", " ", "=", " ", 
+      RowBox[{"2", "*", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"T", "-", "tmin2"}], ")"}], "*", 
+          RowBox[{"(", 
+           RowBox[{"Aw", "-", "awmin2"}], ")"}]}], ")"}], "^", "2"}]}]}], 
+     "  ", ";", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Growth", " ", "for", " ", "WildType", " ", "near", " ", "root"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"tmin2", "=", "8"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"awmin2", "=", "0.94"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Growth3", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"T", "-", "tmin3"}], ")"}], "*", 
+         RowBox[{"(", 
+          RowBox[{"Aw", "-", "awmin3"}], ")"}]}], ")"}], "^", "2"}]}], " ", 
+     ";", " ", 
+     RowBox[{"(*", 
+      RowBox[{"Growth", " ", "for", " ", "GMO", " ", "in", " ", "soil"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"tmin3", "=", "9"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"awmin3", "=", "0.95"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Growth4", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"T", "-", "tmin4"}], ")"}], "*", 
+         RowBox[{"(", 
+          RowBox[{"Aw", "-", "awmin4"}], ")"}]}], ")"}], "^", "2"}]}], " ", 
+     ";", "  ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Growth", " ", "for", " ", "wilddtype", " ", "in", " ", "soil"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"tmin4", "=", "8"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"awmin4", "=", "0.94"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Splant", " ", "=", " ", "100"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Ssoil", " ", "=", " ", "50"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"all", " ", "=", " ", 
+      RowBox[{"{", " ", 
+       RowBox[{
+       "GMOplant", ",", "GMOsoil", ",", " ", "WildPlant", ",", "WildSoil"}], 
+       "}"}]}], ";", "  ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"system", " ", "of", " ", "ODEs"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"init", " ", "=", " ", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"G", "[", "0", "]"}], "\[Equal]", "60"}], ",", 
+        RowBox[{
+         RowBox[{"M", "[", "0", "]"}], "\[Equal]", "3"}], ",", 
+        RowBox[{
+         RowBox[{"B", "[", "0", "]"}], "\[Equal]", "50"}], ",", 
+        RowBox[{
+         RowBox[{"A", "[", "0", "]"}], "\[Equal]", "30"}]}], "}"}]}], ";", 
+     " ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"initial", " ", "population", " ", "density"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"Solution", " ", "=", " ", 
+      RowBox[{"NDSolveValue", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"all", ",", "init"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"G", "[", "t", "]"}], ",", 
+          RowBox[{"M", "[", "t", "]"}], ",", 
+          RowBox[{"B", "[", "t", "]"}], ",", 
+          RowBox[{"A", "[", "t", "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", "200"}], "}"}]}], "]"}]}], ";", "  ", 
+     RowBox[{"(*", 
+      RowBox[{"solution", " ", "for", " ", "system", " ", "of", " ", "ODEs"}],
+       "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"plot1", " ", "=", " ", 
+      RowBox[{"Plot", "[", 
+       RowBox[{"Solution", ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", "200"}], "}"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Red", ",", "Pink", ",", "Blue", ",", "Cyan"}], "}"}]}]}], 
+       "]"}]}], " ", ";", "\[IndentingNewLine]", 
+     RowBox[{"plot2", "=", 
+      RowBox[{"Plot", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Solution", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "+", 
+           RowBox[{"Solution", "[", 
+            RowBox[{"[", "3", "]"}], "]"}]}], ",", 
+          RowBox[{
+           RowBox[{"Solution", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], "+", 
+           RowBox[{"Solution", "[", 
+            RowBox[{"[", "4", "]"}], "]"}]}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", "200"}], "}"}]}], "]"}]}], " ", ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"GraphicsRow", "[", 
+      RowBox[{"{", 
+       RowBox[{"plot1", ",", "plot2"}], "}"}], "]"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.8049300027870965`*^9, 3.8049300510035796`*^9}, {
+  3.804930203294011*^9, 3.80493026576283*^9}, {3.8049303162451873`*^9, 
+  3.804930384899581*^9}, {3.8049304252669196`*^9, 3.8049306400752954`*^9}, {
+  3.804930810685959*^9, 3.8049308284431887`*^9}, {3.8049385773473253`*^9, 
+  3.8049385883352294`*^9}, {3.8049391477379065`*^9, 3.804939171787877*^9}},
+ CellLabel->
+  "In[111]:=",ExpressionUUID->"c86b491a-2485-499d-a6dd-c44da37edd44"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"RunBacteria", "[", 
+    RowBox[{"a0", ",", "b0"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"a0", ",", "0", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"b0", ",", "0", ",", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.804930659456317*^9, 3.8049307296882567`*^9}, {
+   3.804930834130969*^9, 3.804930836987876*^9}, {3.804938563956292*^9, 
+   3.8049386046970453`*^9}, 3.804938661705681*^9, {3.8049390759723005`*^9, 
+   3.804939126754241*^9}, {3.8049391755433235`*^9, 3.804939181725859*^9}},
+ CellLabel->
+  "In[113]:=",ExpressionUUID->"c8bea506-ca31-41eb-8b2a-8164ad525fa9"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a0$$ = 0.73, $CellContext`b0$$ = 0.4, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`a0$$], 0, 2}, {
+      Hold[$CellContext`b0$$], 0, 2}}, Typeset`size$$ = {600., {96., 101.}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`a0$59662$$ = 0, $CellContext`b0$59663$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a0$$ = 0, $CellContext`b0$$ = 0}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a0$$, $CellContext`a0$59662$$, 0], 
+        Hold[$CellContext`b0$$, $CellContext`b0$59663$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, 
+      "Body" :> $CellContext`RunBacteria[$CellContext`a0$$, \
+$CellContext`b0$$], 
+      "Specifications" :> {{$CellContext`a0$$, 0, 2}, {$CellContext`b0$$, 0, 
+         2}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{651., {183., 189.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.8049307190342216`*^9, 3.8049307310221825`*^9}, {
+   3.804930766010664*^9, 3.8049307943588877`*^9}, 3.80493084464139*^9, 
+   3.8049385695879116`*^9, {3.8049386135890965`*^9, 3.804938622353593*^9}, {
+   3.804938663332545*^9, 3.8049386818837924`*^9}, {3.804939099576523*^9, 
+   3.8049391319254827`*^9}, {3.8049391878937426`*^9, 
+   3.8049392039587536`*^9}, {3.804939239833357*^9, 3.804939265009401*^9}},
+ CellLabel->
+  "Out[113]=",ExpressionUUID->"9199171b-e3cc-4707-a68f-97fd4ea05132"]
+}, Open  ]]
+},
+WindowSize->{912, 808},
+WindowMargins->{{331, Automatic}, {Automatic, 0}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 205, 4, 28, "Input",ExpressionUUID->"ecceaec8-d178-47bd-8fe1-1a508820fcfb"],
+Cell[766, 26, 11881, 303, 974, "Input",ExpressionUUID->"c86b491a-2485-499d-a6dd-c44da37edd44"],
+Cell[CellGroupData[{
+Cell[12672, 333, 657, 14, 28, "Input",ExpressionUUID->"c8bea506-ca31-41eb-8b2a-8164ad525fa9"],
+Cell[13332, 349, 2287, 44, 391, "Output",ExpressionUUID->"9199171b-e3cc-4707-a68f-97fd4ea05132"]
+}, Open  ]]
+}
+]
+*)
+
